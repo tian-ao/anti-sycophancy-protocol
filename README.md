@@ -37,10 +37,8 @@ Paste the entire `protocol.md` into your custom instructions / system prompt. Wo
 ### As a Skills.sh Skill
 
 ```bash
-npx skills add your-org/anti-sycophancy-protocol
+npx skills add tian-ao/anti-sycophancy-protocol
 ```
-
-(Coming soon after initial release.)
 
 ## Structure
 
