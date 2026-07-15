@@ -42,7 +42,9 @@ npx skills add tian-ao/anti-sycophancy-protocol
 
 ### For Contributors
 
-If you fork this repo, note that pushing requires a [GitHub Personal Access Token](https://github.com/settings/tokens) (classic, scope: `repo`) due to the `insteadof` proxy configuration — password authentication is not supported. Use the token as the password when prompted during `git push`.
+```bash
+git clone git@github.com:your-username/anti-sycophancy-protocol.git
+```
 
 ## Structure
 
@@ -50,12 +52,10 @@ If you fork this repo, note that pushing requires a [GitHub Personal Access Toke
 anti-sycophancy-protocol/
 ├── README.md                        # This file
 ├── LICENSE                          # MIT
+├── SKILL.md                         # Skills.sh entry point
 ├── protocol.md                      # Full protocol specification (portable)
 ├── claude-integration/
-│   ├── CLAUDE.md                    # Ready-to-copy Claude Code config
-│   └── skill/
-│       ├── SKILL.md                 # Skills.sh compatible skill definition
-│       └── SKILL_REVIEW.md          # Verification checklist
+│   └── CLAUDE.md                    # Ready-to-copy Claude Code config
 └── examples/
     └── before-after.md              # Example responses with/without protocol
 ```
