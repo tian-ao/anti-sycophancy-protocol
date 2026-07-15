@@ -40,6 +40,10 @@ Paste the entire `protocol.md` into your custom instructions / system prompt. Wo
 npx skills add tian-ao/anti-sycophancy-protocol
 ```
 
+### For Contributors
+
+If you fork this repo, note that pushing requires a [GitHub Personal Access Token](https://github.com/settings/tokens) (classic, scope: `repo`) due to the `insteadof` proxy configuration — password authentication is not supported. Use the token as the password when prompted during `git push`.
+
 ## Structure
 
 ```
