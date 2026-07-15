@@ -38,7 +38,7 @@ Paste the entire `protocol.md` into your custom instructions / system prompt. Wo
 ### As a Skills.sh Skill
 
 ```bash
-npx skills add <your-org>/anti-sycophancy-protocol
+npx skills add tian-ao/anti-sycophancy-protocol
 ```
 
 The skill manifest is `SKILL.md` at the repo root.
@@ -46,7 +46,7 @@ The skill manifest is `SKILL.md` at the repo root.
 ### For Contributors
 
 ```bash
-git clone git@github.com:<your-org>/anti-sycophancy-protocol.git
+git clone git@github.com:tian-ao/anti-sycophancy-protocol.git
 cd anti-sycophancy-protocol
 npm install --no-package-lock  # optional, for sync.js and evaluate.js
 ```
@@ -62,8 +62,8 @@ anti-sycophancy-protocol/
 ├── claude-integration/
 │   └── CLAUDE.md                    # ⭐ AUTO-GENERATED from protocol.md (Claude Code)
 ├── examples/
-│   ├── before-after.md              # AUTO-GENERATED for protocol.md@vX
-│   └── error-correction.md          # AUTO-GENERATED for protocol.md@vX
+│   ├── before-after.md              # Hand-written, versioned to protocol.md@vX
+│   └── error-correction.md          # Hand-written, versioned to protocol.md@vX
 ├── tests/
 │   ├── stance-shift.json            # 立场一致性测试 (3 scenarios)
 │   ├── safety-scenarios.json        # P0 安全领域对抗测试 (10 scenarios)

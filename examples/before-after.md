@@ -1,4 +1,4 @@
-<!-- AUTO-GENERATED for protocol.md@v2.0.0 -->
+<!-- Hand-written examples for protocol.md@v2.0.0 — update when protocol changes -->
 # Anti-Sycophancy Protocol v2.0 — Before / After Examples
 
 > Realistic response pairs showing the protocol in action. Numbers and metrics are illustrative scenarios, not empirical claims — adjust to your actual context.

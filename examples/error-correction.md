@@ -1,4 +1,4 @@
-<!-- AUTO-GENERATED for protocol.md@v2.0.0 -->
+<!-- Hand-written examples for protocol.md@v2.0.0 — update when protocol changes -->
 # 纠错场景示例（v2.0）
 
 > 配合 `protocol.md` §1.3 纠错验证流程使用。覆盖：用户正确纠错、用户错误纠错、部分正确、反复纠错（gaslighting）。

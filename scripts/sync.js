@@ -11,6 +11,7 @@
  *   node scripts/sync.js --check        # 仅检查漂移，不修改，输出报告
  *   node scripts/sync.js --force        # 强制覆盖（即使有手动修改）
  *   node scripts/sync.js --target SKILL.md  # 只生成指定目标
+ *   node scripts/sync.js --install      # 生成衍生物并安装到 ~/.claude/skills/
  *
  * 退出码：
  *   0 = 无漂移或已同步
@@ -22,13 +23,14 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const ROOT = path.resolve(__dirname, '..');
 const PROTOCOL = path.join(ROOT, 'protocol.md');
 const SKILL = path.join(ROOT, 'SKILL.md');
 const CLAUDE = path.join(ROOT, 'claude-integration', 'CLAUDE.md');
-const EXAMPLES = path.join(ROOT, 'examples');
-const TESTS = path.join(ROOT, 'tests');
+const INSTALL_DIR = path.join(os.homedir(), '.claude', 'skills', 'anti-sycophancy');
+const INSTALL_SKILL = path.join(INSTALL_DIR, 'SKILL.md');
 
 // ----- Frontmatter Schema -----
 
@@ -244,29 +246,37 @@ function main() {
     }
   }
 
-  // 4. examples / tests 漂移检测（只检测，不生成）
-  if (fs.existsSync(EXAMPLES)) {
+  // 4. 漂移检测 — 由 frontmatter.sync_dependencies 驱动
+  const deps = frontmatter.sync_dependencies || ['examples/', 'tests/'];
+  for (const dep of deps) {
+    const depPath = path.join(ROOT, dep);
+    if (!fs.existsSync(depPath)) {
+      console.log(`Drift check: ${dep} — [SKIP] directory not found`);
+      continue;
+    }
     console.log('');
-    console.log('Drift check: examples/');
-    for (const f of fs.readdirSync(EXAMPLES)) {
-      const fp = path.join(EXAMPLES, f);
-      if (fs.statSync(fp).isFile() && f.endsWith('.md')) {
+    console.log(`Drift check: ${dep}`);
+    const entries = fs.readdirSync(depPath);
+    let found = false;
+    for (const f of entries) {
+      const fp = path.join(depPath, f);
+      if (!fs.statSync(fp).isFile()) continue;
+      found = true;
+      // examples/: .md files must have version marker
+      // tests/: .json/.js files are INFO only
+      if (dep.startsWith('examples') && f.endsWith('.md')) {
         const content = fs.readFileSync(fp, 'utf8');
         const hasMarker = content.includes('protocol.md@v' + frontmatter.version);
         console.log(`  [${hasMarker ? 'OK' : 'DRIFT'}] ${f}`);
         if (!hasMarker) driftDetected = true;
-      }
-    }
-  }
-  if (fs.existsSync(TESTS)) {
-    console.log('');
-    console.log('Drift check: tests/');
-    for (const f of fs.readdirSync(TESTS)) {
-      const fp = path.join(TESTS, f);
-      if (fs.statSync(fp).isFile() && (f.endsWith('.json') || f.endsWith('.js'))) {
+      } else if (dep.startsWith('tests') && (f.endsWith('.json') || f.endsWith('.js'))) {
+        console.log(`  [INFO] ${f}`);
+      } else if (dep.startsWith('examples') && f.endsWith('.json')) {
+        // JSON files in examples get INFO treatment too
         console.log(`  [INFO] ${f}`);
       }
     }
+    if (!found) console.log('  (empty)');
   }
 
   console.log('');
@@ -305,6 +315,21 @@ function main() {
 
   console.log('');
   console.log('Sync complete.');
+
+  // 6. 安装到本地 skills 目录
+  if (args.includes('--install')) {
+    console.log('');
+    console.log('Install:');
+    if (!fs.existsSync(INSTALL_DIR)) {
+      fs.mkdirSync(INSTALL_DIR, { recursive: true });
+      console.log(`  [MKDIR] ${INSTALL_DIR}`);
+    }
+    const skillContent = fs.readFileSync(SKILL, 'utf8');
+    fs.writeFileSync(INSTALL_SKILL, skillContent, 'utf8');
+    console.log(`  [INSTALL] SKILL.md → ${INSTALL_SKILL} (${skillContent.length} bytes)`);
+    console.log('');
+    console.log('Install complete. Skill is now active in this environment.');
+  }
 }
 
 if (require.main === module) {
